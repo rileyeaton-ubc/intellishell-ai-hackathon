@@ -38,10 +38,13 @@
 
 ## 2. Documentation of AI Tools Used
 
-### 2.1 Overview of AI Tools - TODO
+### 2.1 Overview of AI Tools
 
-- **Tool Name**: List each AI tool used (e.g., ChatGPT, CodeWhisperer): ChatGPT, CodeWhisperer, Llama.
-- **Purpose**: Describe the purpose of each tool in the context of the project.
+- **Tool Name**:
+  - CodeWhisperer
+  - ChatGPT
+  - gpt-4o-mini
+- **Purpose**: CodeWhisperer and ChatGPT were used to generate small sections of code and advise on best-practices for the development of this application. gpt-4o-mini is sed to generate the responses to users for the main unix utility.
 
 ### 2.2 Application of AI Tools - TODO
 
