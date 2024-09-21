@@ -4,14 +4,14 @@
 
 ### 1.1 Project Statement
 
-- **Problem Statement**: Describe the primary problem or challenge that the project aims to address.
-  - New programmers when entering the industry may suffer from difficulty of using unix commands and implementing them.
-- **Objectives**: List the key objectives of the project.
-  - To make usage of unix commands easier.
-  - To make unix commands possible to understand them better.
+- **Problem Statement**: When new programmers begin their learning journey, unix commands often stand in their way. Many of these commands have non-intuitive syntax that is hard to memorize without practice. This stands in the way of effective development as these commands are the foundation of most medium to low-level programming.
+- **Objectives**:
+  - To allow users to easily find unix commands within the shell by interacting with it through natural language.
+  - To enable easier understanding and retention of unix commands long-term.
 - **Target Audience**: Define who the intended beneficiaries or users are.
-  - New programmers that are new to programming.
-  - People looking to make usage of unix commands easier.
+  - Anyone that is new to programming, and needs to use the shell
+  - Those who have worked with high-level languages, but want to explore how to effectively use lower-level tools and begin development
+  - Those who have no idea what the shell is, as this solution will provide an approachable medium for anyone to learn
 
 ### 1.2 Proposed Solution
 
