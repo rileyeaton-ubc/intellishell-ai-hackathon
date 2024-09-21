@@ -30,7 +30,7 @@
   - Students who are new to Computer Science will be able learn essential commands quicker, leading to better academic results.
   - Those who have no computer science knowledge will be able to use their computers with greater efficiency using the terminal/shell.
 
-### 1.3 Technical Aspects - TODO
+### 1.3 Technical Aspects
 
 - **Programming Languages**: We have built the interactive shell using C because it is easiest for creating with low-level programs such as this custom shell.
 - **Frameworks and Libraries**:
@@ -46,17 +46,15 @@
   - gpt-4o-mini
 - **Purpose**: CodeWhisperer and ChatGPT were used to generate small sections of code and advise on best-practices for the development of this application. gpt-4o-mini is sed to generate the responses to users for the main unix utility.
 
-### 2.2 Application of AI Tools - TODO
+### 2.2 Application of AI Tools
 
 - **When Applied**: Specify when each tool was applied during the project phases (e.g., brainstorming, developing)
   - That was come.
 - **How Applied**: Detail the methods or processes through which the AI tool was utilized.
 - **Rationale**: Explain why each tool was selected for its specific application.
 
-### 2.3 Total use of AI Tools - TODO
+### 2.3 Total use of AI Tools
 
-- **Participan 1-- %usage**: Detail the percentage of AI tool usage by the participant across different project phases, such as brainstorming, development, documentation, and testing. Specify which tools were used most frequently.
-- **Participan 2-- %usage**: Detail the percentage of AI tool usage by the participant across different project phases, such as brainstorming, development, documentation, and testing. Specify which tools were used most frequently.
-- **Participan 3-- %usage**: Detail the percentage of AI tool usage by the participant across different project phases, such as brainstorming, development, documentation, and testing. Specify which tools were used most frequently.
-- **Participan 4-- %usage**: Detail the percentage of AI tool usage by the participant across different project phases, such as brainstorming, development, documentation, and testing. Specify which tools were used most frequently.
-- **Participan 5-- %usage**: Detail the percentage of AI tool usage by the participant across different project phases, such as brainstorming, development, documentation, and testing. Specify which tools were used most frequently.
+- **Participant 1 - 50%**: Used AI tools brainstorming the best implementation method, and how to debug C on Windows.
+- **Participant 2 - 30%**: Mainly used the tools as a fast way to lookup best practices in C and exact syntax when they knew what they needed, but not the exact code.
+- **Participant 3 - 0%**: No use of AI tools
