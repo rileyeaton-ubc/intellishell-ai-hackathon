@@ -35,6 +35,7 @@
 - **Programming Languages**: We have built the interactive shell using C because it is easiest for creating with low-level programs such as this custom shell.
 - **Frameworks and Libraries**:
   - **libcurl** for handing the HTTP requests, specifically querying the desired generative AI API. In the future, this will not be necessary as we will run generations on-device. However, this addition will limit who can run this tool as powerful computational resources are required to run generative AI locally.
+  - **libcjson** for handing the formatted JSON that is returned from the desired generative AI API. The generated content must be separated from the rest of the JSON object so it can be displayed in the shell.
 
 ## 2. Documentation of AI Tools Used
 
