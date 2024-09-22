@@ -85,7 +85,7 @@ void print_choice_message_content(const char *json_response) {
             if (message != NULL) {
                 cJSON *content = cJSON_GetObjectItem(message, "content"); // Content key
                 if (content != NULL && cJSON_IsString(content)) {
-                    printf("Message Content: %s\n", content->valuestring); // Actual content of message
+                    printf("Generated Response => %s\n", content->valuestring); // Actual content of message
                 }
             }
         }
@@ -246,7 +246,7 @@ int main() {
     }
 
     // Call API function to test
-    if (get_generation("What is the command for changing directories?", curl, res) != 0) {
+    if (get_generation("What is the command for listing all files in a directory?", curl, res) != 0) {
         fprintf(stderr, "Failed to get generation\n");
         curl_easy_cleanup(curl);
         return -1;
