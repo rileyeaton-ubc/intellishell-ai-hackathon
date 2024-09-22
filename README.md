@@ -28,6 +28,8 @@ A unix shell written in C that has all the features of a standard shell, but aug
 - User can prompt the shell with questions to find the command they're looking for if they're unaware of the exact syntax, and the integrated generative AI will provide them some recommendations.
 - When a user enters a command that does not exist, the shell will automatically provide them some similar commands using generative AI.
 
+**[Further Documentation](documentation.md)**
+
 **[Link to Presentation](https://docs.google.com/presentation/d/1UYCU6g3t17dN9dPBUXXxKK3hNdLxhgOsNKjiyRTwZ6E/edit?usp=sharing)**
 
 ## Installation Guide
