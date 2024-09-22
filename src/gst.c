@@ -36,6 +36,12 @@ int set_api_credential() {
     return 0;
 }
 
+// Callback function to handle HTTP response
+static size_t write_callback(void *contents, size_t size, size_t nmemb, void *userp) {
+    size_t realsize = size * nmemb;
+    fwrite(contents, size, nmemb, stdout);  // Print response to stdout
+    return realsize;
+}
 
 // Function to query the OpenAI API using a given prompt and return a generation 
 get_generation(char* prompt) {
