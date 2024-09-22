@@ -4,6 +4,11 @@
 #include <curl/curl.h>
 #include <cjson/cJSON.h>
 
+
+// ANSI escape codes for colors
+const char *green_text = "\e[0;32m"; // Green colour text
+const char *reset_text_new = "\e[0m";  // Reset text colour to default
+
 // Function to get the API key, and set it as an environment variable
 int set_api_credential() {    
     // Open the file called "env" in read mode
@@ -85,7 +90,7 @@ void print_choice_message_content(const char *json_response) {
             if (message != NULL) {
                 cJSON *content = cJSON_GetObjectItem(message, "content"); // Content key
                 if (content != NULL && cJSON_IsString(content)) {
-                    printf("Generated Response => %s\n", content->valuestring); // Actual content of message
+                    printf("%sGenerated Response =>%s %s\n", green_text, reset_text_new, content->valuestring); // Actual content of message
                 }
             }
         }
@@ -138,8 +143,8 @@ int get_generation(char* prompt, CURL *curl, CURLcode res) {
 
     // Add main parameters to pass to API such as model, temperature, and seed
     cJSON_AddStringToObject(root, "model", "gpt-4o-mini");
-    cJSON_AddNumberToObject(root, "temperature", 0.6);
-    cJSON_AddNumberToObject(root, "seed", 12345);
+    cJSON_AddNumberToObject(root, "temperature", 0.9);
+    cJSON_AddNumberToObject(root, "seed", 15);
 
     // Create the messages array and print on failure
     cJSON *messages = cJSON_AddArrayToObject(root, "messages");
@@ -161,7 +166,7 @@ int get_generation(char* prompt, CURL *curl, CURLcode res) {
     // Add the system role to the object, and the content that grounds it for each generation
     cJSON_AddStringToObject(system_message, "role", "system");
     cJSON_AddStringToObject(system_message, "content",
-        "You are a helpful and knowledgeable UNIX shell assistant named IntelliShell. You will assist users who are using the UNIX shell by providing insight into command usage, error messages, recommended commands, and general tips as needed. Respond in plain text (no formatting), and ensure you are succinct yet insightful.");
+        "You are a helpful and knowledgeable UNIX shell assistant named IntelliShell. You will assist users who are using the UNIX shell by providing insight into command usage, error messages, recommended commands, and general tips as needed. Only respond in plain text, using no more than 3 lines.");
     cJSON_AddItemToArray(messages, system_message); // Add above system message object to array
 
     // Create the user message JSON object and print on failure
@@ -219,42 +224,6 @@ int get_generation(char* prompt, CURL *curl, CURLcode res) {
     if (response.memory) {
         free(response.memory);
     }
-
-    return 0;
-}
-
-
-
-int main() {
-    // Initialize CURL library
-    CURL *curl;
-    CURLcode res;
-    curl_global_init(CURL_GLOBAL_DEFAULT);
-    curl = curl_easy_init();
-    
-    // Check if CURL initialization was successful
-    if (!curl) {
-        fprintf(stderr, "Failed to initialize CURL\n");
-        return -1;
-    }
-    
-    // Set the API credential
-    if (set_api_credential() != 0) {
-        fprintf(stderr, "Cannot proceed, as the API key could not be set\n");
-        curl_easy_cleanup(curl);
-        return -1;
-    }
-
-    // Call API function to test
-    if (get_generation("What is the command for changing directories?", curl, res) != 0) {
-        fprintf(stderr, "Failed to get generation\n");
-        curl_easy_cleanup(curl);
-        return -1;
-    }
-    
-    // Clean up CURL
-    curl_easy_cleanup(curl);
-    curl_global_cleanup();
 
     return 0;
 }
