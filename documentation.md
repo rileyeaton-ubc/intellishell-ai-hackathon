@@ -1,8 +1,6 @@
 # Project Documentation
 
-## 1. Project Overview
-
-### IntelliShell
+## 1. Project Overview - IntelliShell
 
 ### 1.1 Project Statement
 
