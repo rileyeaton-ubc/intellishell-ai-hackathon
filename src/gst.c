@@ -246,7 +246,7 @@ int main() {
     }
 
     // Call API function to test
-    if (get_generation("What is the command for listing all files in a directory?", curl, res) != 0) {
+    if (get_generation("What is the command for changing directories?", curl, res) != 0) {
         fprintf(stderr, "Failed to get generation\n");
         curl_easy_cleanup(curl);
         return -1;
