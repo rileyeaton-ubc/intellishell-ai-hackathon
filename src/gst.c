@@ -10,8 +10,7 @@ int set_api_credential() {
     FILE *env = fopen("env", "r");
     if (env == NULL) {
         // If the file could not be opened, print an error message and exit
-        perror("Error opening environment variable file\n");
-        fclose(env);
+        fprintf(stderr, "Error opening environment variable file\n");
         return -1;
     }
 
@@ -24,7 +23,7 @@ int set_api_credential() {
 
         // Set the OPENAI_API_KEY environment variable
         if (setenv("OPENAI_API_KEY", line, 1) != 0) {
-            perror("Failed to set environment variable OPENAI_API_KEY\n");
+            fprintf(stderr, "Failed to set environment variable OPENAI_API_KEY\n");
             fclose(env);
             return -1;
         }
@@ -42,6 +41,26 @@ struct MemoryStruct {
     char *memory;
     size_t size;
 };
+
+// Callback function to write the response to a memory buffer
+static size_t curl_callback(void *contents, size_t size, size_t nmemb, void *userp) {
+    size_t realsize = size * nmemb;
+    struct MemoryStruct *mem = (struct MemoryStruct *)userp;
+
+    char *ptr = realloc(mem->memory, mem->size + realsize + 1);
+    if (ptr == NULL) {
+        // Memory allocation failed
+        fprintf(stderr, "Not enough memory for response\n");
+        return 0;
+    }
+
+    mem->memory = ptr;
+    memcpy(&(mem->memory[mem->size]), contents, realsize);
+    mem->size += realsize;
+    mem->memory[mem->size] = 0;  // Null-terminate the string
+
+    return realsize;
+}
 
 // Function to extract and print the 'choices[0].message.content' from the JSON response
 void print_choice_message_content(const char *json_response) {
@@ -71,27 +90,6 @@ void print_choice_message_content(const char *json_response) {
     cJSON_Delete(json);
 }
 
-// Callback function to write the response to a memory buffer
-static size_t curl_callback(void *contents, size_t size, size_t nmemb, void *userp) {
-    size_t realsize = size * nmemb;
-    struct MemoryStruct *mem = (struct MemoryStruct *)userp;
-
-    char *ptr = realloc(mem->memory, mem->size + realsize + 1);
-    if (ptr == NULL) {
-        // Memory allocation failed
-        fprintf(stderr, "Not enough memory for response\n");
-        return 0;
-    }
-
-    // Add the new data to the memory buffer
-    mem->memory = ptr;
-    memcpy(&(mem->memory[mem->size]), contents, realsize);
-    mem->size += realsize;
-    mem->memory[mem->size] = 0;  // Null-terminate the string
-
-    return realsize;
-}
-
 // Function to query the OpenAI API using a given prompt and return a generation 
 int get_generation(char* prompt, CURL *curl, CURLcode res) {
     // First, check to see if the API environment variable exists
@@ -100,6 +98,11 @@ int get_generation(char* prompt, CURL *curl, CURLcode res) {
         perror("Environment variable OPENAI_API_KEY is already set\n");
         return -1;
     }
+
+    // Initialize the MemoryStruct
+    struct MemoryStruct response;
+    response.memory = NULL;  // Important: Initialize to NULL
+    response.size = 0;       // Initialize size to 0
 
     // Set URL for the request, for this case it will always be the chat completions
     curl_easy_setopt(curl, CURLOPT_URL, "https://api.openai.com/v1/chat/completions");
@@ -136,37 +139,63 @@ int get_generation(char* prompt, CURL *curl, CURLcode res) {
     // Set the callback function
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curl_callback);
 
-    // Create the request    
+    // **Add this line to pass the response struct to the callback**
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)&response);
+
+    // Perform the request
     res = curl_easy_perform(curl);
 
-    // If there is an error getting the response, print this and return a fail code
+    // Check for errors
     if (res != CURLE_OK) {
         fprintf(stderr, "Generation failed for reason %s\n", curl_easy_strerror(res));
         printf("Please try again\n");
-        return -1;
+    } else {
+        // Process the response
+        print_choice_message_content(response.memory);
+    }
+
+    // Clean up headers
+    curl_slist_free_all(headers);
+
+    // Free the response memory
+    if (response.memory) {
+        free(response.memory);
     }
 
     return 0;
 }
 
+
 int main() {
-    // initialize curl library with variable
+    // Initialize CURL library
     CURL *curl;
     CURLcode res;
     curl_global_init(CURL_GLOBAL_DEFAULT);
     curl = curl_easy_init();
     
-    // Call the function to get the api key in the env file and set it as an environment variable
+    // Check if CURL initialization was successful
+    if (!curl) {
+        fprintf(stderr, "Failed to initialize CURL\n");
+        return -1;
+    }
+    
+    // Set the API credential
     if (set_api_credential() != 0) {
-        perror("Cannot proceed, as the API key could not be set\n");
+        fprintf(stderr, "Cannot proceed, as the API key could not be set\n");
+        curl_easy_cleanup(curl);
         return -1;
     }
 
-    // Call api function to test
-    get_generation("What is the command for changing directories?", curl, res);
+    // Call API function to test
+    if (get_generation("What is the command for changing directories?", curl, res) != 0) {
+        fprintf(stderr, "Failed to get generation\n");
+        curl_easy_cleanup(curl);
+        return -1;
+    }
     
-    // Clean up curl
+    // Clean up CURL
     curl_easy_cleanup(curl);
+    curl_global_cleanup();
 
     return 0;
 }
