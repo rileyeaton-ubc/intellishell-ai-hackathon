@@ -44,7 +44,7 @@ static size_t curl_callback(void *contents, size_t size, size_t nmemb, void *use
 }
 
 // Function to query the OpenAI API using a given prompt and return a generation 
-get_generation(char* prompt, CURL *curl) {
+int get_generation(char* prompt, CURL *curl, CURLcode res) {
     // First, check to see if the API environment variable exists
     const char *api_key = getenv("OPENAI_API_KEY");
     if (api_key == NULL) {
@@ -57,9 +57,13 @@ get_generation(char* prompt, CURL *curl) {
 
     // Set correct headers, including the API key as bearer
     struct curl_slist *headers = NULL;
+    char *auth_start = "Authorization: Bearer ";
+    char *auth_string = malloc(strlen(auth_start) + strlen(api_key) + 1);
+    sprintf(auth_string, "%s%s", auth_start, api_key);
     headers = curl_slist_append(headers, "Content-Type: application/json");
-    headers = curl_slist_append(headers, "Authorization: Bearer %s", api_key);
+    headers = curl_slist_append(headers, auth_string);
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+    free(auth_string);
 
     // Data in the post request
     const char *data =
@@ -89,11 +93,11 @@ get_generation(char* prompt, CURL *curl) {
     // If there is an error getting the response, print this and return a fail code
     if (res != CURLE_OK) {
         fprintf(stderr, "Generation failed for reason %s\n", curl_easy_strerror(res));
-        printf("Please try again\n")
+        printf("Please try again\n");
         return -1;
     }
 
-    return res
+    return 0;
 }
 
 int main() {
@@ -110,7 +114,7 @@ int main() {
     }
 
     // Call api function to test
-    get_generation("What is the command for changing directories?", curl)
+    get_generation("What is the command for changing directories?", curl, res);
     
     // Clean up curl
     curl_easy_cleanup(curl);
