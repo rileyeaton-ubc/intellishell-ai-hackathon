@@ -2,8 +2,9 @@
 
 # Define variables for paths and compiler
 CC = gcc
-SRC = src/gst.c
-OUT = bin/intelliShell
+SRC = src/shell.c
+GEN_SRC = src/generation.c
+OUT = IntelliShell
 CURL = -lcurl
 JSON = -lcjson
 
