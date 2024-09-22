@@ -10,7 +10,7 @@
 
 #define MAX_COMMAND_LENGTH 1024
 #define MAX_ARGS 100
-#define MAX_PATH 4096
+#define MAX_PATH 1000
 #define MAX_USERID 500
 
 // Function to parse the command and its arguments
