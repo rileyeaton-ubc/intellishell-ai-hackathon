@@ -8,8 +8,10 @@ The "AI for Social Good Hackathon" is an exciting event where students get toget
 
 ### TEAM NAME
 
-Name: **GroupOne**\
+Name: **DayOne**\
 Program: **IntelliShell (AI Shell Tool)**
+
+![IntelliShell Brief Demo](./res/demo-video.gif)
 
 ### PROBLEM STATEMENT
 
@@ -26,7 +28,9 @@ A unix shell written in C that has all the features of a standard shell, but aug
 - User can prompt the shell with questions to find the command they're looking for if they're unaware of the exact syntax, and the integrated generative AI will provide them some recommendations.
 - When a user enters a command that does not exist, the shell will automatically provide them some similar commands using generative AI.
 
----
+**[Further Documentation](documentation.md)**
+
+**[Link to Presentation](https://docs.google.com/presentation/d/1UYCU6g3t17dN9dPBUXXxKK3hNdLxhgOsNKjiyRTwZ6E/edit?usp=sharing)**
 
 ## Installation Guide
 
@@ -35,7 +39,7 @@ In a unix, linux, or WSL environment
 1. With git installed, run `git clone git@github.com:rileyeaton-ubc/groupone-ai-hackathon-1.git` to clone the repository
 2. If not already in the folder, run `cd groupone-ai-hackathon-1`
 3. Simply run `make`, which will compile _and_ run the shell
-4. _(if not already)_ install curl using `brew install curl` (Mac, [and you may need to link headers using `brew link curl --force`]) or `sudo apt-get install libcurl4-openssl-dev` (Ubuntu)
+4. _(if not already)_ install curl using `sudo apt-get install libcurl4-openssl-dev`
 5. ^ Same as above but with cJSON `libcjson-dev`
 6. ^ Same as above but with readline `libreadline6-dev`
 

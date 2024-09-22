@@ -7,14 +7,13 @@ GEN_SRC = src/generation.c
 OUT = IntelliShell
 CURL = -lcurl
 JSON = -lcjson
-READLLINE= -lreadline
 
 # Default target to compile and run
 all: $(OUT) run
 
 # Target to compile the program, and link curl
 $(OUT): $(SRC)
-	$(CC) $(SRC) $(GEN_SRC) -o $(OUT) $(CURL) $(JSON) $(READLLINE)
+	$(CC) $(SRC) -o $(OUT) $(CURL) $(JSON)
 
 # Target to run the compiled executable
 run: $(OUT)
