@@ -2,7 +2,7 @@
 
 ## 1. Project Overview
 
-### UNIX-GST (Generative Shell Tool)
+### IntelliShell
 
 ### 1.1 Project Statement
 
