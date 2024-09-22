@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <curl/curl.h>
 
 // Function to get the API key, and set it as an environment variable
 int set_api_credential() {    
@@ -35,12 +36,28 @@ int set_api_credential() {
     return 0;
 }
 
+
+// Function to query the OpenAI API using a given prompt and return a generation 
+get_generation(char* prompt) {
+    // First, check to see if the API environment variable exists
+    const char *api_key = getenv("OPENAI_API_KEY");
+    if (api_key == NULL) {
+        perror("Environment variable OPENAI_API_KEY is already set.\n");
+        return -1;
+    }
+
+    // Make curl request
+}
+
 int main() {
     // Call the function to get the api key in the env file and set it as an environment variable
     if (set_api_credential() != 0) {
         perror("cannot proceed, as the API key could not be set");
         return -1;
     }
+
+    // Call api function to test
+    get_generation("What is the command for changing directories?")
     
     return 0;
 }
