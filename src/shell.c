@@ -40,12 +40,10 @@ void execute_command(char** args) {
 }
 
 int main() {
-    // Store the command ran, arguments, the current working directory, and the user's username
+    // Store the command ran, arguments, the current working directory
     char command[MAX_COMMAND_LENGTH];
     char* args[MAX_ARGS];
     char cwd[MAX_PATH];
-    char username[MAX_USERID];
-    cuserid(username);
 
     while (1) {
         // Store working directory and print error on failure
@@ -56,7 +54,7 @@ int main() {
 
         // Print shell prompt
         char prompt[MAX_COMMAND_LENGTH];
-        snprintf(prompt, sizeof(prompt), "%s IntelliShell ~%s$ ", username, cwd);
+        snprintf(prompt, sizeof(prompt), "IntelliShell ~%s$ ", cwd);
 
         // Read command input
         char* input = readline(prompt); // prompt is the string you use in printf
