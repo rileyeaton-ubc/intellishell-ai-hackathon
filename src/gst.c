@@ -20,9 +20,9 @@ int set_api_credential() {
         // Remove the leading newline from the string
         line[strcspn(line, "\r\n")] = 0;
 
-        // Set the GST_API_KEY environment variable
-        if (setenv("GST_API_KEY", line, 1) != 0) {
-            perror("Failed to set environment variable GST_API_KEY");
+        // Set the OPENAI_API_KEY environment variable
+        if (setenv("OPENAI_API_KEY", line, 1) != 0) {
+            perror("Failed to set environment variable OPENAI_API_KEY");
             fclose(env);
             return -1;
         }

@@ -9,7 +9,7 @@ The "AI for Social Good Hackathon" is an exciting event where students get toget
 ### TEAM NAME
 
 Name: **GroupOne**
-Program: **UNIX-GST (Generative Shell Tool)**
+Program: **IntelliShell (AI Shell Tool)**
 
 ### PROBLEM STATEMENT
 
@@ -38,4 +38,4 @@ In a unix, linux, or WSL environment
 
 ## Usage
 
-Once the UNIX-GST shell is running, you can use all the UNIX commands you normally would. Simply communicate with the shell in natural language to ask a question or to search for a command you're looking for.
+Once the IntelliShell is running, you can use all the UNIX commands you normally would. Simply communicate with the shell in natural language to ask a question or to search for a command you're looking for.
