@@ -44,22 +44,27 @@ struct MemoryStruct {
 
 // Callback function to write the response to a memory buffer
 static size_t curl_callback(void *contents, size_t size, size_t nmemb, void *userp) {
+    // Calculate the real size of the incoming data
     size_t realsize = size * nmemb;
-    struct MemoryStruct *mem = (struct MemoryStruct *)userp;
+    struct MemoryStruct *mem = (struct MemoryStruct *)userp; // Cast the pointer to custom MemoryStruct
 
+    // Reallocate memory to fit  new data
     char *ptr = realloc(mem->memory, mem->size + realsize + 1);
     if (ptr == NULL) {
         // Memory allocation failed
         fprintf(stderr, "Not enough memory for response\n");
-        return 0;
+        return 0;  // Returning 0 will cause libcurl to abort the operation
     }
 
+    // Update the memory pointer and copy the new data into the buffer
     mem->memory = ptr;
     memcpy(&(mem->memory[mem->size]), contents, realsize);
+    // Update the memory pointer and copy the new data into the buffer
     mem->size += realsize;
-    mem->memory[mem->size] = 0;  // Null-terminate the string
+    // Null-terminate the string
+    mem->memory[mem->size] = 0;
 
-    return realsize;
+    return realsize; // Return the number of bytes handled
 }
 
 // Function to extract and print the 'choices[0].message.content' from the JSON response
@@ -67,20 +72,20 @@ void print_choice_message_content(const char *json_response) {
     // Parse the JSON response
     cJSON *json = cJSON_Parse(json_response);
     if (json == NULL) {
-        fprintf(stderr, "Error parsing JSON\n");
+        fprintf(stderr, "Error parsing JSON\n"); // Print an error if this fails
         return;
     }
 
     // Extract 'choices[0].message.content' from the json body
     cJSON *choices = cJSON_GetObjectItem(json, "choices");
     if (choices != NULL && cJSON_IsArray(choices)) {
-        cJSON *first_choice = cJSON_GetArrayItem(choices, 0);
+        cJSON *first_choice = cJSON_GetArrayItem(choices, 0); // First item in choices array
         if (first_choice != NULL) {
-            cJSON *message = cJSON_GetObjectItem(first_choice, "message");
+            cJSON *message = cJSON_GetObjectItem(first_choice, "message"); // Message key
             if (message != NULL) {
-                cJSON *content = cJSON_GetObjectItem(message, "content");
+                cJSON *content = cJSON_GetObjectItem(message, "content"); // Content key
                 if (content != NULL && cJSON_IsString(content)) {
-                    printf("Message Content: %s\n", content->valuestring);
+                    printf("Message Content: %s\n", content->valuestring); // Actual content of message
                 }
             }
         }
@@ -115,24 +120,28 @@ int get_generation(char* prompt, CURL *curl, CURLcode res) {
         fprintf(stderr, "Failed to allocate memory for auth_string\n");
         return -1;
     }
-    sprintf(auth_string, "%s%s", auth_start, api_key);
+    sprintf(auth_string, "%s%s", auth_start, api_key); // Add the token to the auth bearer string
+
+    // Set required headers, including auth and setup
     headers = curl_slist_append(headers, "Content-Type: application/json");
     headers = curl_slist_append(headers, auth_string);
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-    free(auth_string);
+    free(auth_string); // Clean up
 
     // Build the JSON data with the provided prompt using cJSON
     cJSON *root = cJSON_CreateObject();
     if (!root) {
-        fprintf(stderr, "Failed to create JSON root object\n");
+        fprintf(stderr, "Failed to create JSON root object\n"); // If failed, print
         curl_slist_free_all(headers);
         return -1;
     }
 
+    // Add main parameters to pass to API such as model, temperature, and seed
     cJSON_AddStringToObject(root, "model", "gpt-4o-mini");
     cJSON_AddNumberToObject(root, "temperature", 0.6);
     cJSON_AddNumberToObject(root, "seed", 12345);
 
+    // Create the messages array and print on failure
     cJSON *messages = cJSON_AddArrayToObject(root, "messages");
     if (!messages) {
         fprintf(stderr, "Failed to create messages array\n");
@@ -141,6 +150,7 @@ int get_generation(char* prompt, CURL *curl, CURLcode res) {
         return -1;
     }
 
+    // Create the system message JSON object and print on failure
     cJSON *system_message = cJSON_CreateObject();
     if (!system_message) {
         fprintf(stderr, "Failed to create system message object\n");
@@ -148,11 +158,13 @@ int get_generation(char* prompt, CURL *curl, CURLcode res) {
         curl_slist_free_all(headers);
         return -1;
     }
+    // Add the system role to the object, and the content that grounds it for each generation
     cJSON_AddStringToObject(system_message, "role", "system");
     cJSON_AddStringToObject(system_message, "content",
         "You are a helpful and knowledgeable UNIX shell assistant named IntelliShell. You will assist users who are using the UNIX shell by providing insight into command usage, error messages, recommended commands, and general tips as needed. Respond in plain text (no formatting), and ensure you are succinct yet insightful.");
-    cJSON_AddItemToArray(messages, system_message);
+    cJSON_AddItemToArray(messages, system_message); // Add above system message object to array
 
+    // Create the user message JSON object and print on failure
     cJSON *user_message = cJSON_CreateObject();
     if (!user_message) {
         fprintf(stderr, "Failed to create user message object\n");
@@ -160,11 +172,12 @@ int get_generation(char* prompt, CURL *curl, CURLcode res) {
         curl_slist_free_all(headers);
         return -1;
     }
+    // Add the user roll to the object, and their prompt that was passed as a parameter
     cJSON_AddStringToObject(user_message, "role", "user");
     cJSON_AddStringToObject(user_message, "content", prompt);
-    cJSON_AddItemToArray(messages, user_message);
+    cJSON_AddItemToArray(messages, user_message); // Add above user message object to array
 
-    // Convert the JSON object to a string
+    // Convert the JSON object to a string, and print on failure
     char *data = cJSON_PrintUnformatted(root);
     cJSON_Delete(root);
     if (!data) {
@@ -188,6 +201,7 @@ int get_generation(char* prompt, CURL *curl, CURLcode res) {
 
     // Check for errors
     if (res != CURLE_OK) {
+        // If the response failed, print the failure and free up all allocations
         fprintf(stderr, "Generation failed: %s\n", curl_easy_strerror(res));
         printf("Please try again\n");
         curl_slist_free_all(headers);
