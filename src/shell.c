@@ -7,6 +7,7 @@
 #include <sys/wait.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include "generation.h"  // Include the header file
 
 #define MAX_COMMAND_LENGTH 1024
 #define MAX_ARGS 100
@@ -58,7 +59,7 @@ char* concat_args(char** args) {
 }
 
 // Function to execute the command
-void execute_command(char** args) {
+void execute_command(char** args, CURL *curl, CURLcode res) {
     pid_t pid = fork(); // Create a child process
     if (pid == 0) { // Child process
         execvp(args[0], args); // Try to execute the command
@@ -98,6 +99,24 @@ int main() {
     char command[MAX_COMMAND_LENGTH];
     char* args[MAX_ARGS];
     char cwd[MAX_PATH];
+    // Initialize CURL library
+    CURL *curl;
+    CURLcode res;
+    curl_global_init(CURL_GLOBAL_DEFAULT);
+    curl = curl_easy_init();
+    
+    // Check if CURL initialization was successful
+    if (!curl) {
+        fprintf(stderr, "Failed to initialize CURL\n");
+        return -1;
+    }
+    
+    // Set the API credential
+    if (set_api_credential() != 0) {
+        fprintf(stderr, "Cannot proceed, as the API key could not be set\n");
+        curl_easy_cleanup(curl);
+        return -1;
+    }
 
     while (1) {
         // Store working directory and print error on failure
@@ -155,8 +174,12 @@ int main() {
         }
 
         // Execute the command
-        execute_command(args);
+        execute_command(args, curl, res);
     }
+
+    // Clean up CURL
+    curl_easy_cleanup(curl);
+    curl_global_cleanup();
 
     return 0;
 }
