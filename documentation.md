@@ -36,6 +36,7 @@
 - **Frameworks and Libraries**:
   - **libcurl** for handing the HTTP requests, specifically querying the desired generative AI API. In the future, this will not be necessary as we will run generations on-device. However, this addition will limit who can run this tool as powerful computational resources are required to run generative AI locally.
   - **libcjson** for handing the formatted JSON that is returned from the desired generative AI API. The generated content must be separated from the rest of the JSON object so it can be displayed in the shell.
+  - **libreadline** for keeping track of previously entered commands in the custom shell. This will allow the user to go back to their previous commands using arrow keys.
 
 ## 2. Documentation of AI Tools Used
 
@@ -45,7 +46,7 @@
   - CodeWhisperer
   - ChatGPT
   - gpt-4o-mini
-- **Purpose**: CodeWhisperer and ChatGPT were used to generate small sections of code and advise on best-practices for the development of this application. gpt-4o-mini is sed to generate the responses to users for the main unix utility.
+- **Purpose**: CodeWhisperer and ChatGPT were used to generate small sections of code and advise on best-practices for the development of this application. gpt-4o-mini is used to generate the responses to users for the main unix utility.
 
 ### 2.2 Application of AI Tools
 
@@ -56,6 +57,6 @@
 
 ### 2.3 Total use of AI Tools
 
-- **Participant 1 - 50%**: Used AI tools brainstorming the best implementation method, and how to debug C on Windows.
-- **Participant 2 - 30%**: Mainly used the tools as a fast way to lookup best practices in C and exact syntax when they knew what they needed, but not the exact code.
+- **Participant 1 - 80%**: Used AI tools brainstorming the best implementation method, and how to debug C on Windows.
+- **Participant 2 - 50%**: Mainly used the tools as a fast way to lookup best practices in C and exact syntax when they knew what they needed, but not the exact code.
 - **Participant 3 - 0%**: No use of AI tools
