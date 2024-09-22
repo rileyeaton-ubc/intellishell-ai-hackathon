@@ -11,6 +11,8 @@ The "AI for Social Good Hackathon" is an exciting event where students get toget
 Name: **GroupOne**\
 Program: **IntelliShell (AI Shell Tool)**
 
+![IntelliShell Brief Demo](./res/demo_video.gif)
+
 ### PROBLEM STATEMENT
 
 When new programmers begin their learning journey, unix commands often stand in their way. Many of these commands have non-intuitive syntax that is hard to memorize without practice. This stands in the way of effective development as these commands are the foundation of most medium to low-level programming.
