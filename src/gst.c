@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <curl/curl.h>
+#include <cjson/cJSON.h>
 
 // Function to get the API key, and set it as an environment variable
 int set_api_credential() {    
@@ -36,10 +37,58 @@ int set_api_credential() {
     return 0;
 }
 
-// Callback function to handle HTTP response
+// Structure to hold the response data
+struct MemoryStruct {
+    char *memory;
+    size_t size;
+};
+
+// Function to extract and print the 'choices[0].message.content' from the JSON response
+void print_choice_message_content(const char *json_response) {
+    // Parse the JSON response
+    cJSON *json = cJSON_Parse(json_response);
+    if (json == NULL) {
+        fprintf(stderr, "Error parsing JSON\n");
+        return;
+    }
+
+    // Extract 'choices[0].message.content' from the json body
+    cJSON *choices = cJSON_GetObjectItem(json, "choices");
+    if (choices != NULL && cJSON_IsArray(choices)) {
+        cJSON *first_choice = cJSON_GetArrayItem(choices, 0);
+        if (first_choice != NULL) {
+            cJSON *message = cJSON_GetObjectItem(first_choice, "message");
+            if (message != NULL) {
+                cJSON *content = cJSON_GetObjectItem(message, "content");
+                if (content != NULL && cJSON_IsString(content)) {
+                    printf("Message Content: %s\n", content->valuestring);
+                }
+            }
+        }
+    }
+
+    // Clean up
+    cJSON_Delete(json);
+}
+
+// Callback function to write the response to a memory buffer
 static size_t curl_callback(void *contents, size_t size, size_t nmemb, void *userp) {
     size_t realsize = size * nmemb;
-    fwrite(contents, size, nmemb, stdout);  // Print response to stdout
+    struct MemoryStruct *mem = (struct MemoryStruct *)userp;
+
+    char *ptr = realloc(mem->memory, mem->size + realsize + 1);
+    if (ptr == NULL) {
+        // Memory allocation failed
+        fprintf(stderr, "Not enough memory for response\n");
+        return 0;
+    }
+
+    // Add the new data to the memory buffer
+    mem->memory = ptr;
+    memcpy(&(mem->memory[mem->size]), contents, realsize);
+    mem->size += realsize;
+    mem->memory[mem->size] = 0;  // Null-terminate the string
+
     return realsize;
 }
 

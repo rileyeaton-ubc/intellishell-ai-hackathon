@@ -5,13 +5,14 @@ CC = gcc
 SRC = src/gst.c
 OUT = bin/intelliShell
 CURL = -lcurl
+JSON = -lcjson
 
 # Default target to compile and run
 all: $(OUT) run
 
 # Target to compile the program, and link curl
 $(OUT): $(SRC)
-	$(CC) $(SRC) -o $(OUT) $(CURL) 
+	$(CC) $(SRC) -o $(OUT) $(CURL) $(JSON)
 
 # Target to run the compiled executable
 run: $(OUT)
