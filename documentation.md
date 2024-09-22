@@ -46,7 +46,7 @@
   - CodeWhisperer
   - ChatGPT
   - gpt-4o-mini
-- **Purpose**: CodeWhisperer and ChatGPT were used to generate small sections of code and advise on best-practices for the development of this application. gpt-4o-mini is sed to generate the responses to users for the main unix utility.
+- **Purpose**: CodeWhisperer and ChatGPT were used to generate small sections of code and advise on best-practices for the development of this application. gpt-4o-mini is used to generate the responses to users for the main unix utility.
 
 ### 2.2 Application of AI Tools
 
