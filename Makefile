@@ -4,7 +4,7 @@
 CC = gcc
 SRC = src/shell.c
 GEN_SRC = src/generation.c
-OUT = bin/intelliShell
+OUT = IntelliShell
 CURL = -lcurl
 JSON = -lcjson
 READLLINE= -lreadline
