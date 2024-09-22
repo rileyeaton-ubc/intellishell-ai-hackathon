@@ -35,6 +35,7 @@ In a unix, linux, or WSL environment
 1. With git installed, run `git clone git@github.com:rileyeaton-ubc/groupone-ai-hackathon-1.git` to clone the repository
 2. If not already in the folder, run `cd groupone-ai-hackathon-1`
 3. Simply run `make`, which will compile _and_ run the shell
+4. _(if not already)_ install curl using `sudo apt-get install libcurl4-openssl-dev`
 
 ## Usage
 
