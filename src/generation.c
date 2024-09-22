@@ -138,8 +138,8 @@ int get_generation(char* prompt, CURL *curl, CURLcode res) {
 
     // Add main parameters to pass to API such as model, temperature, and seed
     cJSON_AddStringToObject(root, "model", "gpt-4o-mini");
-    cJSON_AddNumberToObject(root, "temperature", 0.6);
-    cJSON_AddNumberToObject(root, "seed", 12345);
+    cJSON_AddNumberToObject(root, "temperature", 0.9);
+    cJSON_AddNumberToObject(root, "seed", 15);
 
     // Create the messages array and print on failure
     cJSON *messages = cJSON_AddArrayToObject(root, "messages");
@@ -161,7 +161,7 @@ int get_generation(char* prompt, CURL *curl, CURLcode res) {
     // Add the system role to the object, and the content that grounds it for each generation
     cJSON_AddStringToObject(system_message, "role", "system");
     cJSON_AddStringToObject(system_message, "content",
-        "You are a helpful and knowledgeable UNIX shell assistant named IntelliShell. You will assist users who are using the UNIX shell by providing insight into command usage, error messages, recommended commands, and general tips as needed. Respond in plain text (no formatting), and ensure you are succinct yet insightful.");
+        "You are a helpful and knowledgeable UNIX shell assistant named IntelliShell. You will assist users who are using the UNIX shell by providing insight into command usage, error messages, recommended commands, and general tips as needed. Only respond in plain text, using no more than 3 lines.");
     cJSON_AddItemToArray(messages, system_message); // Add above system message object to array
 
     // Create the user message JSON object and print on failure
