@@ -14,6 +14,12 @@
 #define MAX_PATH 500
 #define MAX_USERID 500
 
+// ANSI escape codes for colors
+const char *purple_text = "\e[0;35m"; // Purple colour text
+const char *reset_text = "\e[0m";  // Reset text colour to default
+const char *cyan_bold_text = "\e[1;36m"; // Cyan colour bold text
+const char *red_bold_text = "\e[1;31m"; // Bolt red text
+
 // Function to parse the command and its arguments
 void parse_command(char* command, char** args) {
     int i = 0;
@@ -59,7 +65,12 @@ void execute_command(char** args, CURL *curl, CURLcode res) {
         execvp(args[0], args); // Try to execute the command
         // If execvp returns, an error occurred
         printf("The following error occurred, generating AI response...\n");
-        perror(args[0]); // Print the command name with the error
+        
+        // Concatenate all arguments to a single string
+        size_t len = strlen(red_bold_text) + strlen(args[0]) + 1;
+        char* concatenated_error = (char*)malloc(len);
+        snprintf(concatenated_error, len, "%s%s", red_bold_text, args[0]);
+        perror(concatenated_error); // Print the command name with the error
         
         // Concatenate all arguments to a single string
         char* concatenated_args = concat_args(args);
@@ -83,7 +94,7 @@ void execute_command(char** args, CURL *curl, CURLcode res) {
     }
 }
 
-int main() {
+int main() { 
     // Store the command ran, arguments, the current working directory
     char command[MAX_COMMAND_LENGTH];
     char* args[MAX_ARGS];
@@ -116,7 +127,7 @@ int main() {
 
         // Print shell prompt
         char prompt[MAX_COMMAND_LENGTH];
-        snprintf(prompt, sizeof(prompt), "IntelliShell ~%s$ ", cwd);
+        snprintf(prompt, sizeof(prompt), "%sIntelliShell%s ~%s%s$ ", cyan_bold_text, purple_text, cwd, reset_text);
 
         // Read command input
         char* input = readline(prompt); // prompt is the string you use in printf

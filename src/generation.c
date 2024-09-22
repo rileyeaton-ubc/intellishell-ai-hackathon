@@ -4,6 +4,11 @@
 #include <curl/curl.h>
 #include <cjson/cJSON.h>
 
+
+// ANSI escape codes for colors
+const char *green_text = "\e[0;32m"; // Green colour text
+const char *reset_text_new = "\e[0m";  // Reset text colour to default
+
 // Function to get the API key, and set it as an environment variable
 int set_api_credential() {    
     // Open the file called "env" in read mode
@@ -85,7 +90,7 @@ void print_choice_message_content(const char *json_response) {
             if (message != NULL) {
                 cJSON *content = cJSON_GetObjectItem(message, "content"); // Content key
                 if (content != NULL && cJSON_IsString(content)) {
-                    printf("Generated Response => %s\n", content->valuestring); // Actual content of message
+                    printf("%sGenerated Response =>%s %s\n", green_text, reset_text_new, content->valuestring); // Actual content of message
                 }
             }
         }
