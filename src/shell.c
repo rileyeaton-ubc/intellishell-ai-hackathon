@@ -1,8 +1,12 @@
+// Must compile using gcc src/shell.c -o bin/shell_test -lreadline
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 
 #define MAX_COMMAND_LENGTH 1024
 #define MAX_ARGS 100
@@ -35,7 +39,6 @@ void execute_command(char** args) {
     }
 }
 
-
 int main() {
     // Store the command ran, arguments, the current working directory, and the user's username
     char command[MAX_COMMAND_LENGTH];
@@ -52,13 +55,26 @@ int main() {
         }
 
         // Print shell prompt
-        printf("%s IntelliShell ~%s$ ", username, cwd); // Every run, simulate a shell's initial text
-        fflush(stdout);
+        char prompt[MAX_COMMAND_LENGTH];
+        snprintf(prompt, sizeof(prompt), "%s IntelliShell ~%s$ ", username, cwd);
 
         // Read command input
-        if (fgets(command, MAX_COMMAND_LENGTH, stdin) == NULL) {
-            break; // Exit on EOF
+        char* input = readline(prompt); // prompt is the string you use in printf
+
+        if (input == NULL) {
+            break; // Exit on EOF (Ctrl+D)
         }
+
+        // If the input is not empty, add it to the history
+        if (*input != '\0') {
+            add_history(input);
+        }
+
+        // Copy input to command buffer
+        strncpy(command, input, MAX_COMMAND_LENGTH);
+        command[MAX_COMMAND_LENGTH - 1] = '\0'; // Ensure null-termination
+
+        free(input); // readline() allocates memory that needs to be freed
 
         // Remove newline character from the command
         command[strcspn(command, "\n")] = '\0';

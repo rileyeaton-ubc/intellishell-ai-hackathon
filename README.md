@@ -36,7 +36,8 @@ In a unix, linux, or WSL environment
 2. If not already in the folder, run `cd groupone-ai-hackathon-1`
 3. Simply run `make`, which will compile _and_ run the shell
 4. _(if not already)_ install curl using `brew install curl` (Mac, [and you may need to link headers using `brew link curl --force`]) or `sudo apt-get install libcurl4-openssl-dev` (Ubuntu)
-5. ^ Same as above but with cJSON a.k.a. libcjson-dev
+5. ^ Same as above but with cJSON `libcjson-dev`
+6. ^ Same as above but with readline `libreadline6-dev`
 
 ## Usage
 
