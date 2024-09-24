@@ -11,7 +11,7 @@ The "AI for Social Good Hackathon" is an exciting event where students get toget
 Name: **DayOne**\
 Program: **IntelliShell (AI Shell Tool)**
 
-![IntelliShell Brief Demo](./res/demo-video.gif)
+![IntelliShell Brief Demo](./res/demo-video-2.gif)
 
 ### PROBLEM STATEMENT
 
